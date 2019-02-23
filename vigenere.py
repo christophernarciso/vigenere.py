@@ -25,7 +25,8 @@ def file_information(file_name):
     try:
         file = open(file_name, "r")
         text = file.read()
-        return re.sub(r'[^A-Za-z[0-9]', '', text).lower()
+        text = re.sub(r'[^a-zA-Z]', '', text).lower()
+        return text
     except FileNotFoundError:
         print("Could not find file source " + file_name + "\n")
         print("Exiting program...please check if the file is in the current directory.")
@@ -61,15 +62,16 @@ def main():
         padding = key_length - (plaintext_length % key_length)
         should_pad = padding > 0
         print("Amount to pad:", padding)
-        c = 1
+        #c = 1
 
         # Modify the plaintext so its padded to MAX_FILE_SIZE
         for i in range(plaintext_length + padding):
-            if not should_pad and i >= plaintext_length:
+            if not should_pad and i >= plaintext_length or should_pad and i >= MAX_FILE_SIZE:
+                print("reached break statement")
                 break
             elif should_pad and i >= plaintext_length:
-                print("padding count:", c)
-                c += 1
+                #print("padding count:", c)
+                #c += 1
                 modified_string = modified_string + "x"
             else:
                 modified_string = modified_string + plaintext[i]
@@ -85,9 +87,9 @@ def main():
     plaintext = modified_string
     cipher = lowercase_encryption(plaintext, key)
 
-    print("Key:", formatted_print(key))
-    print("\nPlaintext:", formatted_print(plaintext))
-    print("\nCiphertext:", formatted_print(cipher))
+    print("Key:", "\n\n" + formatted_print(key))
+    print("\nPlaintext:", "\n\n" + formatted_print(plaintext))
+    print("\nCiphertext:", "\n\n" + formatted_print(cipher))
 
     pass
 
